@@ -15,50 +15,56 @@ This repo contains a basic Node and Express app to get you started in constructi
 
 ## Steps to Run App
 
-### 1. Install Postgresql
+### 1. Install Postgresql and config file .env follow your credentials
 
 Download postgresql from "https://www.postgresql.org/download/"
+
 Install and setup User
+Example:
+Create a user with no password: "CREATE USER jonathan";
+Create a user with a password: "CREATE USER davide WITH PASSWORD 'jw8s0F4'";
 
-### 2. Config file .env follow your credentials
+Configuration varible:
+POSTGRES_HOST=your-host
+POSTGRES_DATABASE=your-database
+POSTGRES_USER=your-user
+POSTGRES_PASSWORD=your-password
 
-### 3. Install package
+Create file database.json and config follow your user:
+
+{
+"dev": {
+"driver": "pg",
+"host": "127.0.0.1",
+"database": "postgres",
+"user": "postgres",
+"password": "1234"
+},
+"test": {
+"driver": "pg",
+"host": "127.0.0.1",
+"database": "test",
+"user": "postgres",
+"password": "1234"
+}
+}
+
+Connect to database by edit Pool in file database.ts and import to position which use
+Default port is 5432
+
+### 2. Install package
 
 Install NodeJs and Yarn
 Run 'yarn' to install package
 
-### 4. Run migrate DB
+### 3. Run migrate DB
 
 Run 'db-migrate up' to create database
 
-### 5. Run App
+### 4. Run App
 
 Run 'yarn watch' to run application on local
 
-### 6. Run Test
+### 5. Run Test
 
 Run 'yarn test' to run all test case
-
-## API Endpoints
-
-#### Products
-
-GET - "/products"
-GET - "/products/:id"
-GET - "/products/category/:category"
-POST - "/products"
-DELETE - "/products/:id"
-
-#### Users
-
-GET - "/users"
-GET - "/users/:id"
-POST - "/users"
-POST - "/users/logIn"
-DELETE - "/users/:id"
-
-#### Orders
-
-GET - "/orders/complete/:userId"
-GET - "/orders/:userId"
-POST - "/orders"

@@ -6,7 +6,7 @@ import productRoutes from "./handlers/product";
 import userRoutes from "./handlers/user";
 import orderRoutes from "./handlers/order";
 
-const app: express.Application = express();
+export const app: express.Application = express();
 const address: string = "0.0.0.0:3000";
 
 const corsOptions = {

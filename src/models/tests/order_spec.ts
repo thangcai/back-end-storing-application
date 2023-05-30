@@ -1,3 +1,5 @@
+import { app } from "../../server";
+import supertest from "supertest";
 import { OrderStore } from "../order";
 import { ProductStore } from "../product";
 import { UserStore } from "../user";
@@ -5,6 +7,7 @@ import { UserStore } from "../user";
 const store = new OrderStore();
 const userStore = new UserStore();
 const productStore = new ProductStore();
+const request = supertest(app);
 
 describe("Order Model", () => {
   it("create method should add a order", async () => {
@@ -45,5 +48,50 @@ describe("Order Model", () => {
   it("completedOrderByUser method should return the correct Completed Orders by user", async () => {
     const result = await store.completedOrderByUser("1");
     expect(result[0].id).toEqual(1);
+  });
+});
+
+describe("testing order endpoints", () => {
+  let token: string;
+
+  beforeAll(async () => {
+    const userRequest = await request
+      .post("/users/logIn")
+      .send({ userName: "thangnguyen", password: "aaaa" })
+      // to get response in JSON
+      .set("Accept", "application/json");
+
+    token = userRequest.body;
+  });
+
+  it("Add new Order endpoint: /orders [POST] ", async () => {
+    const response = await request
+      .post("/orders")
+      .send({
+        user_id: "1",
+        product_id: 1,
+        quantity: 25,
+        orderstatus: "complete",
+      })
+      .set(`Authorization`, `Bearer ${token}`);
+    expect(response.status).toBe(200);
+  });
+
+  it("ORDER by USER endpoint: /orders/:userId [GET] ", async () => {
+    const response = await request
+      .get("/orders/1")
+      .set(`Authorization`, `Bearer ${token}`);
+    expect(response.status).toBe(200);
+  });
+  it("COMPLETED ORDER BY USER endpoint: /orders/complete/:userId [GET] ", async () => {
+    const response = await request
+      .get("/orders/complete/1")
+      .set(`Authorization`, `Bearer ${token}`);
+    expect(response.status).toBe(200);
+  });
+  it("fails COMPLETED ORDER BY USER endpoint: /orders/complete/:userId [GET] ", async () => {
+    token = token + "ghda";
+    const response = await request.get("/orders/complete/2");
+    expect(response.status).toBe(401);
   });
 });

@@ -5,18 +5,33 @@ import { verifyAuthToken } from "../server";
 const store = new ProductStore();
 
 const index = async (_req: Request, res: Response) => {
-  const products = await store.index();
-  res.json(products);
+  try {
+    const products = await store.index();
+    res.json(products);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const show = async (req: Request, res: Response) => {
-  const product = await store.show(req.params.id);
-  res.json(product);
+  try {
+    const product = await store.show(req.params.id);
+    res.json(product);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const productsByCategory = async (req: Request, res: Response) => {
-  const products = await store.productsByCategory(req.params.category);
-  res.json(products);
+  try {
+    const products = await store.productsByCategory(req.params.category);
+    res.json(products);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const create = async (req: Request, res: Response) => {
@@ -36,14 +51,19 @@ const create = async (req: Request, res: Response) => {
 };
 
 const destroy = async (req: Request, res: Response) => {
-  const deleted = await store.delete(req.params.id);
-  res.json(deleted);
+  try {
+    const deleted = await store.delete(req.params.id);
+    res.json(deleted);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const productRoutes = (app: express.Application) => {
-  app.get("/products", verifyAuthToken, index);
-  app.get("/products/:id", verifyAuthToken, show);
-  app.get("/products/category/:category", verifyAuthToken, productsByCategory);
+  app.get("/products", index);
+  app.get("/products/:id", show);
+  app.get("/products/category/:category", productsByCategory);
   app.post("/products", verifyAuthToken, create);
   app.delete("/products/:id", verifyAuthToken, destroy);
 };

@@ -5,13 +5,23 @@ import { verifyAuthToken } from "../server";
 const store = new OrderStore();
 
 const completedOrderByUser = async (req: Request, res: Response) => {
-  const orders = await store.completedOrderByUser(req.params.userId);
-  res.json(orders);
+  try {
+    const orders = await store.completedOrderByUser(req.params.userId);
+    res.json(orders);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const currentOrderByUser = async (req: Request, res: Response) => {
-  const orders = await store.currentOrderByUser(req.params.userId);
-  res.json(orders);
+  try {
+    const orders = await store.currentOrderByUser(req.params.userId);
+    res.json(orders);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const create = async (req: Request, res: Response) => {

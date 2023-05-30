@@ -1,2 +1,2 @@
-DROP TABLE Orders;
-DROP TABLE OrderItems;
+DROP TABLE if exists Orders cascade;
+DROP TABLE if exists OrderItems cascade;
